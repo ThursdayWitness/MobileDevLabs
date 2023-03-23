@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MainPage());
+void main() => runApp(const Lab1());
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+class Lab1 extends StatefulWidget {
+  const Lab1({Key? key}) : super(key: key);
 
   @override
-  _MainPageState createState() => _MainPageState();
+  _Lab1State createState() => _Lab1State();
 }
 
-class _MainPageState extends State<MainPage> {
+class _Lab1State extends State<Lab1> {
   final myController = TextEditingController();
   var isTextVisible = false;
 
