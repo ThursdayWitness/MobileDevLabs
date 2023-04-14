@@ -14,8 +14,9 @@ class Lab3 extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
             brightness: Brightness.dark,
-            primary: Colors.grey,
-            secondary: Colors.deepOrange),
+            primary: Colors.white70,
+            secondary: Colors.deepOrange,
+            tertiary: Colors.grey),
       ),
       home: const Calculator(),
     );
@@ -40,9 +41,9 @@ enum Operation {
 
 class _CalculatorState extends State<Calculator> {
   var currentOperation = Operation.none;
-  var firstValue = 0;
-  var secondValue = 0;
   var text = "0";
+  var result = "0";
+  bool isResultVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -50,36 +51,48 @@ class _CalculatorState extends State<Calculator> {
         body: Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text(text),
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0),
+          child: Visibility(
+              visible: isResultVisible,
+              child: Text(
+                result,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    fontSize: 24),
+              )),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0),
+          child: Text(
+            text,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.primary, fontSize: 48),
+          ),
+        ),
         Table(children: [
           TableRow(children: [
             ActionButton(
-                child: "C",
+                child: "AC",
                 action: () => setState(() {
+                      if (text == "0") {
+                        result = "0";
+                        isResultVisible = false;
+                      }
                       text = "0";
                       currentOperation = Operation.none;
                     })),
             ActionButton(
-                child: "\u232B",
+                child: "+/-",
                 action: () => setState(() {
-                      if (text.length == 1) {
-                        text = "0";
-                        currentOperation = Operation.none;
-                        return;
-                      }
-                      if (text != "0") {
-                        if (int.tryParse(text[text.length - 1]) == null) {
-                          currentOperation = Operation.none;
-                        }
-                        text = text.substring(0, text.length - 1);
-                      }
+                      text = "-$text";
                     })),
             ActionButton(
                 child: "%",
                 action: () => setState(() {
                       if (currentOperation == Operation.none) {
-                        firstValue = int.parse(text);
                         text += "%";
                         currentOperation = Operation.mod;
                       }
@@ -88,7 +101,6 @@ class _CalculatorState extends State<Calculator> {
                 child: "/",
                 action: () => setState(() {
                       if (currentOperation == Operation.none) {
-                        firstValue = int.parse(text);
                         text += "/";
                         currentOperation = Operation.divide;
                       }
@@ -98,7 +110,7 @@ class _CalculatorState extends State<Calculator> {
             ActionButton(
                 child: "7",
                 action: () => setState(() {
-                      if (text.compareTo("0") == 0) {
+                      if (text == "0") {
                         text = "7";
                       } else {
                         text += "7";
@@ -107,7 +119,7 @@ class _CalculatorState extends State<Calculator> {
             ActionButton(
                 child: "8",
                 action: () => setState(() {
-                      if (text.compareTo("0") == 0) {
+                      if (text == "0") {
                         text = "8";
                       } else {
                         text += "8";
@@ -116,7 +128,7 @@ class _CalculatorState extends State<Calculator> {
             ActionButton(
                 child: "9",
                 action: () => setState(() {
-                      if (text.compareTo("0") == 0) {
+                      if (text == "0") {
                         text = "9";
                       } else {
                         text += "9";
@@ -126,7 +138,6 @@ class _CalculatorState extends State<Calculator> {
                 child: "x",
                 action: () => setState(() {
                       if (currentOperation == Operation.none) {
-                        firstValue = int.parse(text);
                         text += "x";
                         currentOperation = Operation.multiply;
                       }
@@ -145,7 +156,7 @@ class _CalculatorState extends State<Calculator> {
             ActionButton(
                 child: "5",
                 action: () => setState(() {
-                      if (text.compareTo("0") == 0) {
+                      if (text == "0") {
                         text = "5";
                       } else {
                         text += "5";
@@ -154,7 +165,7 @@ class _CalculatorState extends State<Calculator> {
             ActionButton(
                 child: "6",
                 action: () => setState(() {
-                      if (text.compareTo("0") == 0) {
+                      if (text == "0") {
                         text = "6";
                       } else {
                         text += "6";
@@ -164,7 +175,6 @@ class _CalculatorState extends State<Calculator> {
                 child: "-",
                 action: () => setState(() {
                       if (currentOperation == Operation.none) {
-                        firstValue = int.parse(text);
                         text += "-";
                         currentOperation = Operation.subtract;
                       }
@@ -174,7 +184,7 @@ class _CalculatorState extends State<Calculator> {
             ActionButton(
                 child: "1",
                 action: () => setState(() {
-                      if (text.compareTo("0") == 0) {
+                      if (text == "0") {
                         text = "1";
                       } else {
                         text += "1";
@@ -183,7 +193,7 @@ class _CalculatorState extends State<Calculator> {
             ActionButton(
                 child: "2",
                 action: () => setState(() {
-                      if (text.compareTo("0") == 0) {
+                      if (text == "0") {
                         text = "2";
                       } else {
                         text += "2";
@@ -192,7 +202,7 @@ class _CalculatorState extends State<Calculator> {
             ActionButton(
                 child: "3",
                 action: () => setState(() {
-                      if (text.compareTo("0") == 0) {
+                      if (text == "0") {
                         text = "3";
                       } else {
                         text += "3";
@@ -202,7 +212,6 @@ class _CalculatorState extends State<Calculator> {
                 child: "+",
                 action: () => setState(() {
                       if (currentOperation == Operation.none) {
-                        firstValue = int.parse(text);
                         text += "+";
                         currentOperation = Operation.add;
                       }
@@ -212,11 +221,35 @@ class _CalculatorState extends State<Calculator> {
             const Padding(
               padding: EdgeInsets.zero,
             ),
-            ActionButton(child: "0", action: () {}),
-            ActionButton(child: ".", action: () {}),
+            ActionButton(
+              child: "0",
+              action: () => setState(() {
+                if (text != "0") {
+                  text += "0";
+                }
+              }),
+            ),
+            ActionButton(
+                child: ",",
+                action: () {
+                  if (double.tryParse(text) != null) {
+                    setState(() {
+                      text += ".";
+                    });
+                  }
+                }),
             ActionButton(
                 child: "=",
+                customStyle: TextButton.styleFrom(
+                  shape: const CircleBorder(side: BorderSide()),
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                ),
+                customTextStyle: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.normal,
+                    color: Theme.of(context).colorScheme.primary),
                 action: () {
+                  var operationResult = 0.0;
                   switch (currentOperation) {
                     case Operation.mod:
                       {
@@ -228,8 +261,9 @@ class _CalculatorState extends State<Calculator> {
                     case Operation.divide:
                       {
                         setState(() {
-                          secondValue = int.parse(text.split("/")[1]);
-                          text = "=${firstValue/secondValue}";
+                          if (text.split("/")[1] == "0") {}
+                          operationResult = double.parse(text.split("/")[0]) /
+                              double.parse(text.split("/")[1]);
                         });
                       }
                       break;
@@ -237,8 +271,8 @@ class _CalculatorState extends State<Calculator> {
                     case Operation.multiply:
                       {
                         setState(() {
-                          secondValue = int.parse(text.split("*")[1]);
-                          text = "=${firstValue*secondValue}";
+                          operationResult = double.parse(text.split("x")[0]) *
+                              double.parse(text.split("x")[1]);
                         });
                       }
                       break;
@@ -246,8 +280,8 @@ class _CalculatorState extends State<Calculator> {
                     case Operation.subtract:
                       {
                         setState(() {
-                          secondValue = int.parse(text.split("-")[1]);
-                          text = "=${firstValue-secondValue}";
+                          operationResult = double.parse(text.split("-")[0]) -
+                              double.parse(text.split("-")[1]);
                         });
                       }
                       break;
@@ -255,8 +289,8 @@ class _CalculatorState extends State<Calculator> {
                     case Operation.add:
                       {
                         setState(() {
-                          secondValue = int.parse(text.split("+")[1]);
-                          text = "=${firstValue+secondValue}";
+                          operationResult = double.parse(text.split("+")[0]) +
+                              double.parse(text.split("+")[1]);
                         });
                       }
                       break;
@@ -266,6 +300,11 @@ class _CalculatorState extends State<Calculator> {
                         return;
                       }
                   }
+                  // if(operationResult.roundToDouble() == operationResult.toInt())
+                  result = text + "=" + operationResult.toString();
+                  text = "$operationResult";
+                  currentOperation = Operation.none;
+                  isResultVisible = true;
                 }),
           ])
         ])
@@ -277,8 +316,15 @@ class _CalculatorState extends State<Calculator> {
 class ActionButton extends StatefulWidget {
   final String child;
   final void Function() action;
+  final ButtonStyle? customStyle;
+  final TextStyle? customTextStyle;
 
-  const ActionButton({required this.child, required this.action, Key? key})
+  const ActionButton(
+      {required this.child,
+      required this.action,
+      this.customStyle,
+      this.customTextStyle,
+      Key? key})
       : super(key: key);
 
   @override
@@ -288,13 +334,23 @@ class ActionButton extends StatefulWidget {
 class _ActionButtonState extends State<ActionButton> {
   @override
   Widget build(BuildContext context) {
+    var color = Theme.of(context).colorScheme.primary;
+    if (int.tryParse(widget.child) == null && widget.child != ",") {
+      color = Theme.of(context).colorScheme.secondary;
+    }
     return TextButton(
-      onPressed: widget.action,
-      child: Text(widget.child,
-          style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: Colors.deepOrange)),
-    );
+        style: widget.customStyle ??
+            TextButton.styleFrom(
+              fixedSize: const Size(100, 66),
+              shape:
+                  const CircleBorder(side: BorderSide(style: BorderStyle.none)),
+            ),
+        onPressed: widget.action,
+        child: Text(
+          widget.child,
+          style: widget.customTextStyle ??
+              TextStyle(
+                  fontSize: 36, fontWeight: FontWeight.normal, color: color),
+        ));
   }
 }
