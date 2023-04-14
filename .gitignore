@@ -51,3 +51,4 @@ app.*.map.json
 /pubspec.lock
 /pubspec.yaml
 /.metadata
+/lib/firebase_options.dart

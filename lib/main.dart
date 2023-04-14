@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'lab1.dart';
 import 'lab2.dart';
 import 'lab3.dart';
-import 'provider_training.dart';
+import 'lab4.dart';
+// import 'provider_training.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
-  final labs = [const Lab1(), const Lab2(), const Lab3(), const ProviderApp()];
+  final labs = [const Lab1(), const Lab2(), const Lab3(), const Lab4()];
 
   MyApp({Key? key}) : super(key: key);
 
