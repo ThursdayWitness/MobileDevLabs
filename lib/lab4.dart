@@ -11,14 +11,6 @@ class Task {
   Task({this.id, required this.title, required this.description}) {
     creationDate = DateTime.now();
   }
-
-  Map<String, dynamic> toMap() {
-    return {
-      "title": title,
-      "description": description,
-      "creationDate": creationDate
-    };
-  }
 }
 
 class Lab4 extends StatefulWidget {
@@ -161,10 +153,9 @@ class AddTask extends StatelessWidget {
               child: const Text("Добавить"),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  var data = Task(
+                  addTaskToDB(Task(
                       title: controllerTitle.text,
-                      description: controllerDesc.text);
-                  addShit(data.toMap());
+                      description: controllerDesc.text));
                   Navigator.of(context).pop();
                 }
               }),
@@ -209,7 +200,7 @@ class TaskCard extends StatelessWidget {
         ElevatedButton(
             child: const Text("Выполнить"),
             onPressed: () {
-              deleteShit(task);
+              deleteTaskFromDB(task);
               Navigator.of(context).pop();
             }),
       ]),
@@ -217,7 +208,7 @@ class TaskCard extends StatelessWidget {
   }
 }
 
-Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getShitNew() async {
+Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getFromDB() async {
   // Get docs from collection reference
   var querySnapshot =
       await FirebaseFirestore.instance.collection('tasks').get();
@@ -226,12 +217,17 @@ Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getShitNew() async {
   return querySnapshot.docs.toList();
 }
 
-void addShit(Map<String, dynamic> data) {
+void addTaskToDB(Task task) {
+  var data = {
+    "title": task.title,
+    "description": task.description,
+    "creationDate": task.creationDate
+  };
   var dbTasks = FirebaseFirestore.instance.collection('tasks');
   dbTasks.add(data);
 }
 
-void deleteShit(Task task) {
+void deleteTaskFromDB(Task task) {
   var dbTasks = FirebaseFirestore.instance.collection('tasks');
   dbTasks.doc(task.id).delete();
 }
