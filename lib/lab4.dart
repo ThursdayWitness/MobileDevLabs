@@ -92,7 +92,6 @@ class TaskBox extends StatelessWidget {
                       .then((value) => callback!(() => {}));
                 },
                 title: Text(
-                  // task.id == null ? "null" : task.id!,
                   task.title.length > 15
                       ? task.title.substring(0, 15) + '...'
                       : task.title,
@@ -208,19 +207,6 @@ class AddTask extends StatelessWidget {
               onDateChanged: (value) {
                 deadline = value;
               }),
-          /*InputDatePickerFormField(
-            firstDate: deadline,
-            initialDate: deadline,
-            lastDate: DateTime(2222, 12, 31),
-            errorFormatText: "Введите корректную дату.",
-            errorInvalidText: "Введите корректную дату.",
-            onDateSaved: (date) {
-              deadline = date;
-            },
-            onDateSubmitted: (date) {
-              deadline = date;
-            },
-          ),*/
           ElevatedButton(
               child: const Text("Добавить"),
               onPressed: () {
@@ -272,7 +258,6 @@ class TaskCard extends StatelessWidget {
           controller: controllerDesc,
           minLines: 1,
           maxLines: 100,
-          // clipBehavior: Clip.none,
         ),
         const Text("Срок выполнения"),
         TextField(
