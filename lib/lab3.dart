@@ -87,7 +87,9 @@ class _CalculatorState extends State<Calculator> {
             ActionButton(
                 child: "+/-",
                 action: () => setState(() {
-                      text = "-$text";
+                      if (currentOperation == Operation.none) {
+                        text = (-1 * int.parse(text)).toString();
+                      }
                     })),
             ActionButton(
                 child: "%",
@@ -253,15 +255,23 @@ class _CalculatorState extends State<Calculator> {
                   switch (currentOperation) {
                     case Operation.mod:
                       {
-                        //TODO
+                        setState(() {
+                          operationResult =
+                              double.parse(text.substring(0, text.length-1)) /
+                                  100;
+                          text = operationResult.toString();
+                          currentOperation = Operation.none;
+                        });
                         return;
                       }
-                      break;
 
                     case Operation.divide:
                       {
                         setState(() {
-                          if (text.split("/")[1] == "0") {}
+                          if (text.split("/")[1] == "0") {
+                            operationResult = double.infinity;
+                            return;
+                          }
                           operationResult = double.parse(text.split("/")[0]) /
                               double.parse(text.split("/")[1]);
                         });
@@ -300,9 +310,19 @@ class _CalculatorState extends State<Calculator> {
                         return;
                       }
                   }
-                  // if(operationResult.roundToDouble() == operationResult.toInt())
-                  result = text + "=" + operationResult.toString();
-                  text = "$operationResult";
+                  if (operationResult == double.infinity) {
+                    result = text + "=" + "Inf";
+                    text = "0";
+                  } else {
+                    if (operationResult.roundToDouble() ==
+                        operationResult.toInt()) {
+                      result = text + "=" + operationResult.toInt().toString();
+                      text = "${operationResult.toInt()}";
+                    } else {
+                      result = text + "=" + operationResult.toString();
+                      text = "$operationResult";
+                    }
+                  }
                   currentOperation = Operation.none;
                   isResultVisible = true;
                 }),
