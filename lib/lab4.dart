@@ -50,22 +50,33 @@ class _Lab4State extends State<Lab4> {
             }
 
             if (snapshot.connectionState == ConnectionState.done) {
-              var data = snapshot.data!.docs;
-              return ListView(
-                children: [
-                  for (var task in data)
-                    TaskBox(
-                        callback: setState,
-                        task: Task(
-                            id: task.id,
-                            title: task["title"],
-                            description: task["description"],
-                            deadline: (task["deadline"] as Timestamp).toDate(),
-                            isCompleted: task["isCompleted"]))
-                ],
-              );
+              if (snapshot.data!.size == 0) {
+                return Center(
+                  child: Text("Задач нет!\nДобавьте новую, чтобы начать.",
+                      style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center,),
+                );
+              } else {
+                var data = snapshot.data!.docs;
+                return ListView(
+                  children: [
+                    for (var task in data)
+                      TaskBox(
+                          callback: setState,
+                          task: Task(
+                              id: task.id,
+                              title: task["title"],
+                              description: task["description"],
+                              deadline:
+                                  (task["deadline"] as Timestamp).toDate(),
+                              isCompleted: task["isCompleted"]))
+                  ],
+                );
+              }
             }
-            return const Text("loading");
+            return Center(
+              child: Text("Загрузка....",
+                  style: Theme.of(context).textTheme.titleLarge,),
+            );
           },
         ));
   }
@@ -277,8 +288,7 @@ class TaskCard extends StatelessWidget {
         if (task.isCompleted)
           ElevatedButton(
               onPressed: () {
-                confirmDialogBuilder(context, task: task).then((value) {
-                });
+                confirmDialogBuilder(context, task: task).then((value) {});
               },
               child: const Text("Удалить")),
       ]),
