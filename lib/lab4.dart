@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class Task {
   late final String? id;
@@ -52,8 +52,11 @@ class _Lab4State extends State<Lab4> {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.data!.size == 0) {
                 return Center(
-                  child: Text("Задач нет!\nДобавьте новую, чтобы начать.",
-                      style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center,),
+                  child: Text(
+                    "Задач нет!\nДобавьте новую, чтобы начать.",
+                    style: Theme.of(context).textTheme.titleLarge,
+                    textAlign: TextAlign.center,
+                  ),
                 );
               } else {
                 var data = snapshot.data!.docs;
@@ -74,8 +77,10 @@ class _Lab4State extends State<Lab4> {
               }
             }
             return Center(
-              child: Text("Загрузка....",
-                  style: Theme.of(context).textTheme.titleLarge,),
+              child: Text(
+                "Загрузка....",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             );
           },
         ));

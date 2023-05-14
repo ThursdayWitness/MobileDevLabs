@@ -1,7 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tuple/tuple.dart';
-import 'dart:math';
 
 void main() => runApp(const Lab2());
 
@@ -133,20 +134,19 @@ class _MainPageState extends State<MainPage> {
                         if (!item1.isNaN & item2.isNaN) {
                           return Popup("x1 = x2 = ${item1.toStringAsFixed(2)}");
                         }
-                        if(item1.isNaN & !item2.isNaN)
-                          {
-                            return Popup("Уравнение является линейным.\nx = ${item2.toStringAsFixed(2)}");
-                          }
+                        if (item1.isNaN & !item2.isNaN) {
+                          return Popup(
+                              "Уравнение является линейным.\nx = ${item2.toStringAsFixed(2)}");
+                        }
                         if (!item1.isNaN) {
                           output += "x1 = ${item1.toStringAsFixed(2)}\n";
                         }
                         if (!item2.isNaN) {
                           output += "x2 = ${item2.toStringAsFixed(2)}";
                         }
-                        if(item1.isInfinite || item2.isInfinite)
-                          {
-                            return const Popup("Уравнение верно при любых x");
-                          }
+                        if (item1.isInfinite || item2.isInfinite) {
+                          return const Popup("Уравнение верно при любых x");
+                        }
                         return Popup(output);
                       });
                 }
@@ -175,8 +175,8 @@ Tuple2<double, double> calculate(String aStr, String bStr, String cStr) {
   var c = int.parse(cStr);
   //Case 0 : a = 0, x = -c/b
   if (a == 0) {
-    if(b==0) {
-      if(c==0) {
+    if (b == 0) {
+      if (c == 0) {
         return const Tuple2(double.negativeInfinity, double.infinity);
       }
       return const Tuple2(double.nan, double.nan);
@@ -230,6 +230,7 @@ bool isNan(String value) {
 
 class Popup extends StatelessWidget {
   final String messageText;
+
   const Popup(this.messageText, {Key? key}) : super(key: key);
 
   @override

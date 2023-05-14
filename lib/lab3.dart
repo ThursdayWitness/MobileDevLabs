@@ -257,7 +257,7 @@ class _CalculatorState extends State<Calculator> {
                       {
                         setState(() {
                           operationResult =
-                              double.parse(text.substring(0, text.length-1)) /
+                              double.parse(text.substring(0, text.length - 1)) /
                                   100;
                           text = operationResult.toString();
                           currentOperation = Operation.none;
