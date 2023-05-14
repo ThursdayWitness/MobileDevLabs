@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+
+// import 'package:firebase_core/firebase_core.dart';
+// import 'firebase_options.dart';
 import 'lab1.dart';
 import 'lab2.dart';
-import 'lab3.dart';
-import 'lab4.dart';
+import 'lab3_v2.dart';
 // import 'provider_training.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final labs = [const Lab1(), const Lab2(), const Lab3(), const Lab4()];
+  final labs = [const Lab1(), const Lab2(), const Lab3V2()];
 
   MyApp({Key? key}) : super(key: key);
 
