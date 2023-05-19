@@ -39,7 +39,7 @@ class HomePageState extends State<HomePage> {
       'C': {
         "action": () {
           userInput = '';
-          result = '0';
+          result = '';
         },
         "textColor": Theme.of(context).primaryColor
       },
@@ -53,16 +53,22 @@ class HomePageState extends State<HomePage> {
       },
       '%': {
         "action": () {
-          if (userInput.isNotEmpty && !RegExp(r'\D$').hasMatch(userInput)) {
+          if (result.isNotEmpty ||
+              (userInput.isNotEmpty && !RegExp(r'\D$').hasMatch(userInput))) {
             userInput += "%";
+            result += userInput;
+            userInput = '';
           }
         },
         "textColor": Theme.of(context).primaryColor
       },
       '/': {
         "action": () {
-          if (userInput.isNotEmpty && !RegExp(r'\D$').hasMatch(userInput)) {
+          if (result.isNotEmpty ||
+              (userInput.isNotEmpty && !RegExp(r'\D$').hasMatch(userInput))) {
             userInput += "/";
+            result += userInput;
+            userInput = '';
           }
         },
         "textColor": Theme.of(context).primaryColor
@@ -84,8 +90,11 @@ class HomePageState extends State<HomePage> {
       },
       'x': {
         "action": () {
-          if (userInput.isNotEmpty && !RegExp(r'\D$').hasMatch(userInput)) {
+          if (result.isNotEmpty ||
+              (userInput.isNotEmpty && !RegExp(r'\D$').hasMatch(userInput))) {
             userInput += "x";
+            result += userInput;
+            userInput = '';
           }
         },
         "textColor": Theme.of(context).primaryColor
@@ -107,8 +116,11 @@ class HomePageState extends State<HomePage> {
       },
       '—': {
         "action": () {
-          if (userInput.isNotEmpty && !RegExp(r'\D$').hasMatch(userInput)) {
+          if (result.isNotEmpty ||
+              (userInput.isNotEmpty && !RegExp(r'\D$').hasMatch(userInput))) {
             userInput += "-";
+            result += userInput;
+            userInput = '';
           }
         },
         "textColor": Theme.of(context).primaryColor
@@ -130,10 +142,11 @@ class HomePageState extends State<HomePage> {
       },
       '+': {
         "action": () {
-          // var shit = RegExp(r'\D').allMatches(userInput);
-          // for (var element in shit) {print(element.group(0));}
-          if (userInput.isNotEmpty && !RegExp(r'\D$').hasMatch(userInput)) {
+          if (result.isNotEmpty ||
+              (userInput.isNotEmpty && !RegExp(r'\D$').hasMatch(userInput))) {
             userInput += "+";
+            result += userInput;
+            userInput = '';
           }
         },
         "textColor": Theme.of(context).primaryColor
@@ -146,8 +159,9 @@ class HomePageState extends State<HomePage> {
       },
       '.': {
         "action": () {
-          //TODO: finish dots regex
-          if (userInput.isNotEmpty && !RegExp(r'\D$').hasMatch(userInput) && !RegExp(r'\d[.]\d').hasMatch(userInput)) {
+          if (userInput.isNotEmpty &&
+              !RegExp(r'\D$').hasMatch(userInput) &&
+              !RegExp(r'\d[.]\d').hasMatch(userInput)) {
             userInput += ".";
           }
         },
@@ -155,7 +169,13 @@ class HomePageState extends State<HomePage> {
       },
       '=': {
         "action": () {
-          if (userInput.isNotEmpty) calculate(userInput);
+          if (userInput.isNotEmpty) {
+            result += userInput;
+            userInput = result;
+            result = '';
+            calculate(userInput);
+            userInput = '';
+          }
         },
         "color": Theme.of(context).primaryColor,
         "textColor": Colors.white,
@@ -214,6 +234,11 @@ class HomePageState extends State<HomePage> {
     var exp = Parser().parse(userInput);
     var cm = ContextModel();
     var eval = exp.evaluate(EvaluationType.REAL, cm);
-    result = eval.toString();
+    if (RegExp("Inf").hasMatch(eval.toString())) {
+      result = "Ошибка";
+    } else {
+      result = eval.toString();
+    }
+    if (result.endsWith(".0")) result = result.substring(0, result.length - 2);
   }
 }
